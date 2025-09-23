@@ -8,7 +8,10 @@ const { VAC_QUESTIONS, VAC_RESULTS } = require("../data/vac");
 const { generatePDF } = require("../services/pdf-service");
 const { uploadFile, getSignedUrl, isS3Configured } = require("../services/s3-service");
 const { createTransporter, isGmailConfigured } = require("../services/email-service");
-const { v4: uuidv4 } = require("uuid");
+
+function generateRandomUID() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
 
 // Garante que o diretório temporário para PDFs exista (para fallback)
 const tempDir = path.join(__dirname, "..", "public", "temp");
@@ -323,7 +326,7 @@ router.post('/report', async (req, res) => {
 		// Se o e-mail não foi enviado, preparar um link para download
 		let downloadUrl = null;
 		if (!emailSent) {
-			const filename = `relatorios/relatorio-${uuidv4()}.pdf`;
+			const filename = `relatorios/relatorio-${generateRandomUID()}.pdf`;
 
 			// Tenta fazer upload para o S3 se configurado
 			if (isS3Configured()) {
@@ -346,7 +349,7 @@ router.post('/report', async (req, res) => {
 				}
 			} else {
 				// Se S3 não está configurado, usa o método antigo
-				const localFilename = `relatorio-${uuidv4()}.pdf`;
+				const localFilename = `relatorio-${generateRandomUID()}.pdf`;
 				const filePath = path.join(tempDir, localFilename);
 
 				await fs.promises.writeFile(filePath, pdfBuffer);
