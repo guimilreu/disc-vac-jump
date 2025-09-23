@@ -170,5 +170,9 @@ app.use((err, req, res, next) => {
 	});
 });
 
+app.get("/", (_req, res) => {
+    res.redirect("/embed");
+});
+
 const port = Number(config.PORT || 3000);
 app.listen(port, () => console.log(`DISC+VAC up on :${port}`));
