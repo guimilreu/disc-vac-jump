@@ -1,0 +1,14 @@
+### Health
+GET http://localhost:3000/health
+
+
+### SDK loader
+GET http://localhost:3000/sdk/embed-loader.js
+
+
+### Embed HTML (iframe)
+GET http://localhost:3000/embed?org=DEMO&theme=dark
+
+
+### Embed raw
+GET http://localhost:3000/embed/raw?org=DEMO

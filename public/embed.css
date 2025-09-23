@@ -1,0 +1,248 @@
+:root {
+	--font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--bg: #f7f9fc;
+	--panel: #ffffff;
+	--text: #2d3748; /* Cor de texto principal (escuro) */
+	--muted: #718096; /* Cor de texto secundário (cinza) */
+	--accent: #1a3157; /* Cor primária azul escuro */
+	--accent-hover: #0f1f3a; /* Cor mais escura para hovers */
+	--border-color: #e2e8f0;
+	--radius: 12px;
+	--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	font: 16px/1.5 var(--font-family);
+	background: var(--bg);
+	color: var(--text);
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding-top: 40px;
+}
+
+#app {
+	width: 100%;
+	max-width: 800px; /* Largura máxima para o conteúdo */
+}
+
+.topbar {
+	text-align: center;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+.topbar .logo {
+	max-height: 50px;
+	width: auto;
+}
+
+.footer {
+	display: none; /* Ocultar para um visual mais integrado */
+}
+
+.view {
+	padding: 0;
+}
+
+.card {
+	background: var(--panel);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	padding: 24px 28px;
+	box-shadow: var(--shadow);
+	margin-bottom: 20px;
+}
+
+.grid {
+	display: grid;
+	gap: 16px;
+}
+.grid.cols-2 {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 768px) {
+	body {
+		padding-top: 10px;
+	}
+	.grid.cols-2 {
+		grid-template-columns: 1fr;
+	}
+}
+
+.input,
+select.input {
+	width: 100%;
+	padding: 12px 16px;
+	border-radius: 8px;
+	border: 1px solid var(--border-color);
+	background: #f7fafc;
+	color: var(--text);
+	font-family: var(--font-family);
+	font-size: 16px;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 2px rgba(26, 49, 87, 0.2);
+}
+
+.btn {
+	background: var(--accent);
+	border: 0;
+	color: #fff;
+	padding: 12px 20px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-family: var(--font-family);
+	font-weight: 800;
+	font-size: 16px;
+	transition: background-color 0.2s;
+}
+.btn:hover {
+	background: var(--accent-hover);
+}
+.btn:disabled {
+	background: #a0aec0;
+	cursor: not-allowed;
+}
+
+.label {
+	color: var(--muted);
+	font-family: var(--font-family);
+	font-size: 14px;
+	font-weight: 500;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.q {
+	font-size: 1.1rem;
+	font-weight: 600;
+	margin-bottom: 16px;
+}
+
+.opt {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 8px 0;
+	padding: 12px 16px;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	cursor: pointer;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+.opt:hover {
+	border-color: var(--accent);
+}
+input[type="radio"]:checked + span {
+	color: var(--accent);
+	font-weight: 600;
+}
+
+/* VAC Drag & Drop Styles */
+.draggable-list {
+	list-style: none;
+	padding: 0;
+}
+.draggable-item {
+	display: flex;
+	align-items: center;
+	padding: 12px;
+	margin: 8px 0;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	background-color: #fff;
+	cursor: grab;
+	transition: background-color 0.2s, box-shadow 0.2s;
+}
+.draggable-item:active {
+	cursor: grabbing;
+}
+.draggable-item.dragging {
+	background-color: #e2e8f0;
+	box-shadow: var(--shadow);
+	opacity: 0.8;
+}
+.draggable-item .rank-handle {
+	color: var(--muted);
+	margin-right: 12px;
+	font-weight: 700;
+	font-size: 1rem;
+}
+
+/* VAC Arrow Styles */
+.vac-item {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	margin: 8px 0;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	background-color: #fff;
+}
+.vac-item .rank-handle {
+	color: var(--accent);
+	margin-right: 16px;
+	font-weight: 700;
+	font-size: 1.1rem;
+	width: 20px; /* Alinhamento */
+}
+.vac-item .item-label {
+	flex-grow: 1;
+}
+.vac-item .arrow-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.vac-item .arrow-btn {
+	background: transparent;
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	cursor: pointer;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+.vac-item .arrow-btn:hover:not(:disabled) {
+	background-color: #edf2f7;
+	border-color: var(--accent);
+}
+.vac-item .arrow-btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+.vac-item .arrow-btn svg {
+	width: 16px;
+	height: 16px;
+	stroke: var(--muted);
+}
+
+
+/* Bar styles for results */
+.bar {
+	height: 12px;
+	background: #e2e8f0;
+	border-radius: 6px;
+	overflow: hidden;
+}
+.bar > div {
+	height: 100%;
+}
