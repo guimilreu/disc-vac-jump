@@ -187,13 +187,35 @@ input[type="radio"]:checked + span {
 /* VAC Arrow Styles */
 .vac-item {
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	padding: 10px;
-	margin: 8px 0;
+	padding: 10px 15px;
+	margin: 5px 0;
 	border: 1px solid var(--border-color);
 	border-radius: 8px;
-	background-color: #fff;
+	cursor: pointer;
+	gap: 15px; /* Adiciona espaço entre o texto e o círculo */
 }
+
+.rank-circle {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--accent);
+	color: white;
+	font-weight: bold;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 16px;
+	flex-shrink: 0; /* Previne que o círculo encolha */
+	transition: transform 0.2s ease;
+}
+
+.vac-item:hover .rank-circle {
+	transform: scale(1.1);
+}
+
 .vac-item .rank-handle {
 	color: var(--accent);
 	margin-right: 16px;
@@ -235,6 +257,11 @@ input[type="radio"]:checked + span {
 	stroke: var(--muted);
 }
 
+.opt:hover,
+.vac-item:hover {
+	border: 1px solid var(--accent);
+	transition: border 0.3s ease;
+}
 
 /* Bar styles for results */
 .bar {
