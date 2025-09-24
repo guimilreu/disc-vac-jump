@@ -7,7 +7,7 @@ const { DISC_QUESTIONS, DISC_RESULTS } = require("../data/disc");
 const { VAC_QUESTIONS, VAC_RESULTS } = require("../data/vac");
 const { generatePDF } = require("../services/pdf-service");
 const { uploadFile, getSignedUrl, isS3Configured } = require("../services/s3-service");
-const { createTransporter, isGmailConfigured } = require("../services/email-service");
+const { sendEmailWithPdf, isBrevoConfigured } = require("../services/email-service");
 
 function generateRandomUID() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -68,84 +68,19 @@ function drawBarChart(doc, x, y, width, height, data, maxValue) {
   });
 }
 
-// Função para enviar e-mail (agora usando o novo serviço)
+// Função para enviar e-mail usando Brevo API
 async function sendEmail(participant, pdfBuffer) {
-	// O envio agora depende exclusivamente do Gmail via OAuth2
-	if (!isGmailConfigured()) {
-		throw new Error("O serviço de e-mail do Gmail não está configurado.");
+	// O envio agora depende exclusivamente do Brevo API
+	if (!isBrevoConfigured()) {
+		throw new Error("O serviço de e-mail do Brevo não está configurado.");
 	}
 
-	const transporter = await createTransporter();
-	if (!transporter) {
-		throw new Error("Falha ao inicializar o transporter do Gmail. Verifique as configurações.");
+	try {
+		return await sendEmailWithPdf(participant, pdfBuffer);
+	} catch (error) {
+		console.error("Erro ao enviar email:", error);
+		throw error;
 	}
-
-	const mailOptions = {
-		from: config.GMAIL.user,
-		to: participant.email,
-		cc: config.GMAIL.copyTo,
-		subject: "Seu Relatório DISC + VAC - JUMP",
-		html: `
-      <div style="font-family: 'Manrope', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <img src="cid:logo" alt="JUMP" style="height: 60px;">
-          <h1 style="color: #286bfe; margin: 10px 0;">Relatório DISC + VAC</h1>
-        </div>
-        
-        <p>Olá <strong>${sanitizeInput(participant.name)}</strong>,</p>
-        
-        <p>Obrigado por participar do nosso teste DISC + VAC! Seu relatório personalizado está pronto e anexado a este e-mail.</p>
-        
-        <p>No relatório você encontrará:</p>
-        <ul>
-          <li>Seu perfil DISC dominante com interpretação detalhada</li>
-          <li>Seu perfil VAC (Visual, Auditivo, Cinestésico) com recomendações</li>
-          <li>Gráficos visuais dos seus resultados</li>
-          <li>Orientações sobre como usar seus pontos fortes</li>
-        </ul>
-        
-        <p>Este relatório é confidencial e foi gerado exclusivamente para você.</p>
-        
-        <p>Se tiver alguma dúvida ou quiser agendar uma conversa sobre seus resultados, entre em contato conosco.</p>
-        
-        <p>Atenciosamente,<br>
-        <strong>Equipe JUMP</strong></p>
-        
-        <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
-        <p style="font-size: 12px; color: #666;">
-          Este e-mail foi enviado automaticamente. Por favor, não responda a esta mensagem.
-        </p>
-      </div>
-    `,
-		attachments: [
-			{
-				filename: `relatorio-disc-vac-${sanitizeInput(participant.name).toLowerCase().replace(/\s+/g, "-")}.pdf`,
-				content: pdfBuffer,
-				contentType: "application/pdf",
-			},
-		],
-	};
-
-	// Adicionar logo ao e-mail se disponível
-	if (config.JUMP_LOGO_PATH && fs.existsSync(config.JUMP_LOGO_PATH)) {
-		try {
-			const logoPath = config.JUMP_LOGO_PATH;
-			const ext = path.extname(logoPath).toLowerCase();
-			
-			// Apenas adicionar se for um formato suportado para e-mail
-			if (['.png', '.jpg', '.jpeg', '.gif'].includes(ext)) {
-				mailOptions.attachments.push({
-					filename: 'logo.png',
-					path: logoPath,
-					cid: 'logo'
-				});
-			}
-		} catch (error) {
-			console.warn('Erro ao adicionar logo ao e-mail:', error.message);
-		}
-	}
-
-	return transporter.sendMail(mailOptions);
 }
 
 // Rota para obter perguntas do DISC (embaralhadas)
@@ -210,12 +145,13 @@ router.post('/disc/score', (req, res) => {
   }
 });
 
-// Rota para obter perguntas do VAC
+// Rota para obter perguntas do VAC (embaralhadas)
 router.get('/vac', (req, res) => {
   try {
+    const shuffledQuestions = shuffleArray(VAC_QUESTIONS);
     res.json({ 
       success: true, 
-      questions: VAC_QUESTIONS 
+      questions: shuffledQuestions 
     });
   } catch (error) {
     console.error('Erro ao obter perguntas VAC:', error);
@@ -310,12 +246,39 @@ router.post('/report', async (req, res) => {
 		// Incrementar métrica
 		if (metrics) metrics.pdfsGenerated++;
 
-		// Tentar enviar e-mail
+		let downloadUrl = null;
 		let emailSent = false;
+
+		// Sempre tentar upload para S3 se configurado
+		if (isS3Configured()) {
+			try {
+				const filename = `relatorios/relatorio-${generateRandomUID()}.pdf`;
+				await uploadFile(pdfBuffer, filename, "application/pdf");
+				downloadUrl = await getSignedUrl(filename);
+			} catch (s3error) {
+				console.error("Falha no upload para o S3:", s3error);
+			}
+		}
+
+		// Se S3 falhou ou não configurado, usar fallback local
+		if (!downloadUrl) {
+			const localFilename = `relatorio-${generateRandomUID()}.pdf`;
+			const filePath = path.join(tempDir, localFilename);
+			await fs.promises.writeFile(filePath, pdfBuffer);
+			downloadUrl = `/public/temp/${localFilename}`;
+
+			// Limpa o arquivo temporário após 5 minutos
+			setTimeout(() => {
+				fs.promises.unlink(filePath).catch((err) => {
+					console.error(`Falha ao limpar arquivo temporário ${filePath}:`, err);
+				});
+			}, 5 * 60 * 1000);
+		}
+
+		// Tentar enviar e-mail com link
 		try {
-			// Só tenta enviar se o SMTP estiver configurado E a feature estiver habilitada
-			if (config.SMTP && config.MAIL_ENABLED) {
-				await sendEmail(participant, pdfBuffer);
+			if (isBrevoConfigured()) {
+				await sendEmailWithPdf(participant, downloadUrl);
 				emailSent = true;
 				if (metrics) metrics.emailsSent++;
 			}
@@ -323,51 +286,10 @@ router.post('/report', async (req, res) => {
 			console.error("Erro ao enviar e-mail:", emailError);
 		}
 
-		// Se o e-mail não foi enviado, preparar um link para download
-		let downloadUrl = null;
-		if (!emailSent) {
-			const filename = `relatorios/relatorio-${generateRandomUID()}.pdf`;
-
-			// Tenta fazer upload para o S3 se configurado
-			if (isS3Configured()) {
-				try {
-					await uploadFile(pdfBuffer, filename, "application/pdf");
-					downloadUrl = await getSignedUrl(filename);
-				} catch (s3error) {
-					console.error("Falha no upload para o S3. Usando fallback local:", s3error);
-					// Se o S3 falhar, usa o método antigo como fallback
-					const localFilename = path.basename(filename); // usa apenas o nome do arquivo
-					const filePath = path.join(tempDir, localFilename);
-					await fs.promises.writeFile(filePath, pdfBuffer);
-					downloadUrl = `/public/temp/${localFilename}`;
-
-					setTimeout(() => {
-						fs.promises.unlink(filePath).catch((err) => {
-							console.error(`Falha ao limpar arquivo temporário ${filePath}:`, err);
-						});
-					}, 5 * 60 * 1000);
-				}
-			} else {
-				// Se S3 não está configurado, usa o método antigo
-				const localFilename = `relatorio-${generateRandomUID()}.pdf`;
-				const filePath = path.join(tempDir, localFilename);
-
-				await fs.promises.writeFile(filePath, pdfBuffer);
-				downloadUrl = `/public/temp/${localFilename}`;
-
-				// Limpa o arquivo temporário após 5 minutos
-				setTimeout(() => {
-					fs.promises.unlink(filePath).catch((err) => {
-						console.error(`Falha ao limpar arquivo temporário ${filePath}:`, err);
-					});
-				}, 5 * 60 * 1000);
-			}
-		}
-
 		res.json({
 			success: true,
 			emailed: emailSent,
-			downloadUrl: downloadUrl, // Envia a URL de download em vez do Base64
+			downloadUrl: downloadUrl,
 			message: emailSent
 				? "Relatório enviado por e-mail com sucesso!"
 				: "E-mail não pôde ser enviado. Use o download abaixo.",

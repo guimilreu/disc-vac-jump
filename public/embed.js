@@ -329,19 +329,15 @@
 					throw new Error(result.error || "Erro ao gerar relatório");
 				}
 				
+				// Abrir nova guia com o URL do PDF
+				if (result.downloadUrl) {
+					window.open(result.downloadUrl, '_blank');
+				}
+				
 				if (result.emailed) {
-					alert("✅ Relatório enviado por e-mail com sucesso!\n\nVerifique sua caixa de entrada e também a pasta de spam.");
-				} else if (result.downloadUrl) {
-					// Usa a URL de download fornecida pelo servidor
-					const a = document.createElement("a");
-					a.href = result.downloadUrl;
-					a.download = `relatorio-disc-vac-${state.participant.name.toLowerCase().replace(/\s+/g, '-')}.pdf`;
-					document.body.appendChild(a); // Necessário para Firefox
-					a.click();
-					document.body.removeChild(a); // Limpa o elemento
-					alert("📄 Relatório baixado com sucesso!");
+					alert("✅ Relatório enviado por e-mail com sucesso!\n\nVerifique sua caixa de entrada e também a pasta de spam.\nUma nova guia foi aberta com o PDF para visualização imediata.");
 				} else {
-					alert("⚠️ Erro inesperado ao gerar relatório.");
+					alert("📄 Relatório gerado com sucesso! Uma nova guia foi aberta com o PDF para visualização/download.");
 				}
 			} catch (error) {
 				console.error("Erro ao gerar relatório:", error);

@@ -17,11 +17,10 @@ const envSchema = z.object({
 	S3_BUCKET_NAME: z.string().optional(),
 	S3_LINK_EXPIRATION: z.string().optional().default("300"), // 5 minutos
 
-	// Google OAuth2 for Gmail
-	GMAIL_CLIENT_ID: z.string().optional(),
-	GMAIL_CLIENT_SECRET: z.string().optional(),
-	GMAIL_REFRESH_TOKEN: z.string().optional(),
-	GMAIL_USER: z.string().optional(), // O e-mail do qual você está enviando
+	// Brevo API
+	BREVO_API_KEY: z.string().optional(),
+	BREVO_SENDER_EMAIL: z.string().optional(),
+	BREVO_SENDER_NAME: z.string().optional().default("JUMP"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -50,13 +49,12 @@ const config = {
 					linkExpiration: Number(env.S3_LINK_EXPIRATION),
 			  }
 			: null,
-	GMAIL:
-		env.GMAIL_CLIENT_ID && env.GMAIL_CLIENT_SECRET && env.GMAIL_REFRESH_TOKEN && env.GMAIL_USER
+	BREVO:
+		env.BREVO_API_KEY && env.BREVO_SENDER_EMAIL
 			? {
-					clientId: env.GMAIL_CLIENT_ID,
-					clientSecret: env.GMAIL_CLIENT_SECRET,
-					refreshToken: env.GMAIL_REFRESH_TOKEN,
-					user: env.GMAIL_USER,
+					apiKey: env.BREVO_API_KEY,
+					senderEmail: env.BREVO_SENDER_EMAIL,
+					senderName: env.BREVO_SENDER_NAME,
 					copyTo: env.MAIL_COPY_TO,
 			  }
 			: null,
