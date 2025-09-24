@@ -102,14 +102,16 @@ async function generatePDF(participant, discResult, vacResult) {
 	try {
 		browser = await puppeteer.launch({
 			headless: true,
-			executablePath: "/usr/bin/chromium-browser",
-			args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+			executablePath: "/usr/bin/chromium",
+			args: [
+				"--no-sandbox",
+				"--disable-setuid-sandbox",
+				"--disable-dev-shm-usage",
+				"--disable-gpu",
+				"--disable-software-rasterizer",
+			],
+			protocolTimeout: 60000, // aumenta tempo limite
 		});
-		// browser = await puppeteer.launch({
-		// 	headless: "new",
-		// 	args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-		// 	executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-		// });
 
 		const page = await browser.newPage();
 		await page.emulateMediaType("screen");
