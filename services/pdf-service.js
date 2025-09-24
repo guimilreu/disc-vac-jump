@@ -23,23 +23,19 @@ hbs.registerHelper("barChart", function (items, options) {
 			return `
             <g transform="translate(${x}, 0)">
                 <rect x="0" y="${y}" width="${barWidth}" height="${barHeight}" rx="4" fill="${color}" />
-                <text x="${barWidth / 2}" y="${y - 8}" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">${
-				item.value
-			}</text>
                 <text x="${barWidth / 2}" y="${
-				chartHeight + 20
-			}" text-anchor="middle" fill="#666" font-size="12">${item.label}</text>
+				y - 8
+			}" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">${item.value}</text>
+                <text x="${barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="#666" font-size="12">${
+				item.label
+			}</text>
             </g>
         `;
 		})
 		.join("");
 
 	return new hbs.SafeString(`
-        <svg width="${width}" height="${
-		chartHeight + 30
-	}" viewBox="0 0 ${width} ${
-		chartHeight + 30
-	}" xmlns="http://www.w3.org/2000/svg">
+        <svg width="${width}" height="${chartHeight + 30}" viewBox="0 0 ${width} ${chartHeight + 30}" xmlns="http://www.w3.org/2000/svg">
             ${bars}
         </svg>
     `);
@@ -106,9 +102,14 @@ async function generatePDF(participant, discResult, vacResult) {
 	try {
 		browser = await puppeteer.launch({
 			headless: true,
+			executablePath: "/usr/bin/chromium-browser",
 			args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-			executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
 		});
+		// browser = await puppeteer.launch({
+		// 	headless: "new",
+		// 	args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+		// 	executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+		// });
 
 		const page = await browser.newPage();
 		await page.emulateMediaType("screen");
