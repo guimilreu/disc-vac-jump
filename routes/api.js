@@ -253,8 +253,8 @@ router.post('/report', async (req, res) => {
 		if (isS3Configured()) {
 			try {
 				const filename = `relatorios/relatorio-${generateRandomUID()}.pdf`;
-				await uploadFile(pdfBuffer, filename, "application/pdf");
-				downloadUrl = await getSignedUrl(filename);
+				const uploadResult = await uploadFile(pdfBuffer, filename, "application/pdf");
+				downloadUrl = uploadResult.Location; // Usa a URL pública permanente
 			} catch (s3error) {
 				console.error("Falha no upload para o S3:", s3error);
 			}

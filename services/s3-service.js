@@ -30,32 +30,13 @@ async function uploadFile(buffer, filename, contentType) {
 		Key: filename,
 		Body: buffer,
 		ContentType: contentType,
+		ACL: 'public-read', // Torna o objeto publicamente legível
 	};
 
 	return s3.upload(params).promise();
 }
 
-/**
- * Gera uma URL assinada para download de um arquivo do S3.
- * @param {string} key A chave (nome do arquivo) do objeto no S3.
- * @returns {Promise<string>} A URL assinada para download.
- */
-async function getSignedUrl(key) {
-	if (!config.S3) {
-		throw new Error("O serviço S3 não está configurado.");
-	}
-
-	const params = {
-		Bucket: config.S3.bucketName,
-		Key: key,
-		Expires: config.S3.linkExpiration,
-	};
-
-	return s3.getSignedUrlPromise("getObject", params);
-}
-
 module.exports = {
 	uploadFile,
-	getSignedUrl,
 	isS3Configured: () => !!config.S3,
 };

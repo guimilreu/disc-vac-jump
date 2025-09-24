@@ -62,17 +62,17 @@ async function generatePDF(participant, discResult, vacResult) {
 
 	const totalDisc = Object.values(discResult.score).reduce((sum, val) => sum + val, 0) || 1;
 	const discData = [
-		{ label: "Dominância (D)", value: Math.round(discResult.score.D / totalDisc * 100) },
-		{ label: "Influência (I)", value: Math.round(discResult.score.I / totalDisc * 100) },
-		{ label: "Estabilidade (S)", value: Math.round(discResult.score.S / totalDisc * 100) },
-		{ label: "Conformidade (C)", value: Math.round(discResult.score.C / totalDisc * 100) },
+		{ label: "Dominância (D)", value: ((discResult.score.D / totalDisc) * 100).toFixed(1) },
+		{ label: "Influência (I)", value: ((discResult.score.I / totalDisc) * 100).toFixed(1) },
+		{ label: "Estabilidade (S)", value: ((discResult.score.S / totalDisc) * 100).toFixed(1) },
+		{ label: "Conformidade (C)", value: ((discResult.score.C / totalDisc) * 100).toFixed(1) },
 	];
 
 	const totalVac = Object.values(vacResult.score).reduce((sum, val) => sum + val, 0) || 1;
 	const vacData = [
-		{ label: "Visual", value: Math.round(vacResult.score.V / totalVac * 100) },
-		{ label: "Auditivo", value: Math.round(vacResult.score.A / totalVac * 100) },
-		{ label: "Cinestésico", value: Math.round(vacResult.score.K / totalVac * 100) },
+		{ label: "Visual", value: ((vacResult.score.V / totalVac) * 100).toFixed(1) },
+		{ label: "Auditivo", value: ((vacResult.score.A / totalVac) * 100).toFixed(1) },
+		{ label: "Cinestésico", value: ((vacResult.score.K / totalVac) * 100).toFixed(1) },
 	];
 
 	const renderData = {

@@ -254,18 +254,18 @@
 		// Calcular porcentagens DISC
 		const totalDisc = Object.values(d.score).reduce((sum, val) => sum + val, 0) || 1;
 		const discPcts = {
-			D: Math.round((d.score.D / totalDisc) * 100),
-			I: Math.round((d.score.I / totalDisc) * 100),
-			S: Math.round((d.score.S / totalDisc) * 100),
-			C: Math.round((d.score.C / totalDisc) * 100),
+			D: ((d.score.D / totalDisc) * 100).toFixed(1),
+			I: ((d.score.I / totalDisc) * 100).toFixed(1),
+			S: ((d.score.S / totalDisc) * 100).toFixed(1),
+			C: ((d.score.C / totalDisc) * 100).toFixed(1),
 		};
 
 		// Calcular porcentagens VAC
 		const totalVac = Object.values(v.score).reduce((sum, val) => sum + val, 0) || 1;
 		const vacPcts = {
-			V: Math.round((v.score.V / totalVac) * 100),
-			A: Math.round((v.score.A / totalVac) * 100),
-			K: Math.round((v.score.K / totalVac) * 100),
+			V: ((v.score.V / totalVac) * 100).toFixed(1),
+			A: ((v.score.A / totalVac) * 100).toFixed(1),
+			K: ((v.score.K / totalVac) * 100).toFixed(1),
 		};
 		
 		view.innerHTML = `
