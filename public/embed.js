@@ -69,6 +69,22 @@
               <button class="btn" id="next">${idx === questions.length - 1 ? "Concluir DISC" : "Próximo"}</button>
             </div>
           </div>`;
+
+				// Adicionar evento para avanço automático ao clicar na opção
+				document.querySelectorAll('.opt').forEach(label => {
+					label.addEventListener('click', () => {
+						const radio = label.querySelector('input');
+						radio.checked = true;
+						state.disc.answers[idx] = { id: q.id, key: radio.value };
+						if (idx < questions.length - 1) {
+							idx++;
+							render();
+						} else {
+							finishDISC();
+						}
+					});
+				});
+
 				byId("prev").onclick = () => {
 					if (idx > 0) idx--;
 					render();
@@ -136,64 +152,60 @@
 			function render() {
 				const q = questions[idx];
 
+				// Inicializar estado de ranks para esta pergunta
+				if (!state.vac.answers[idx]) {
+					state.vac.answers[idx] = { id: q.id, ranks: {} }; // { tag: rank }
+				}
+
+				const currentRanks = state.vac.answers[idx].ranks;
+				let nextRank = Object.keys(currentRanks).length + 1; // Próximo rank a atribuir (1,2,3)
+
 				view.innerHTML = `
 					<div class="card">
 						<div class="label">VAC • Questão ${idx + 1} de ${questions.length}</div>
 						<div class="q">${q.text}</div>
-						<div class="label">Clique nas setas para ordenar as opções.</div>
+						<div class="label">Clique nas opções para ordená-las: 1º, 2º e 3º.</div>
 						<div id="vac-list">
-							${q.options.map((o, i) => `
+							${q.options.map((o) => `
 								<div class="vac-item" data-tag="${o.tag}">
-									<span class="rank-handle">${i + 1}º</span>
+									<span class="rank-circle">${currentRanks[o.tag] ? currentRanks[o.tag] : ''}</span>
 									<span class="item-label">${o.label}</span>
-									<div class="arrow-buttons">
-										<button class="arrow-btn up-btn" title="Mover para cima">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-										</button>
-										<button class="arrow-btn down-btn" title="Mover para baixo">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-										</button>
-									</div>
 								</div>
 							`).join("")}
 						</div>
 						<div style="display:flex;justify-content:space-between;margin-top:20px;">
 							<button class="btn" id="prev" ${idx === 0 ? "disabled" : ""}>Voltar</button>
-							<button class="btn" id="next">${idx === questions.length - 1 ? "Concluir VAC" : "Próximo"}</button>
+							<button class="btn" id="next" disabled>${idx === questions.length - 1 ? "Concluir VAC" : "Próximo"}</button>
 						</div>
 					</div>`;
-				
-				const list = byId("vac-list");
 
-				function updateButtons() {
-					const items = list.querySelectorAll('.vac-item');
-					items.forEach((item, index) => {
-						item.querySelector('.up-btn').disabled = (index === 0);
-						item.querySelector('.down-btn').disabled = (index === items.length - 1);
-						item.querySelector('.rank-handle').textContent = `${index + 1}º`;
+				const items = document.querySelectorAll('.vac-item');
+				items.forEach(item => {
+					item.addEventListener('click', () => {
+						const tag = item.dataset.tag;
+						if (currentRanks[tag]) {
+							// Se já rankeado, ignorar ou resetar (aqui ignoramos para simplicidade)
+							return;
+						}
+						if (nextRank <= 3) {
+							currentRanks[tag] = nextRank;
+							item.querySelector('.rank-circle').textContent = nextRank;
+							nextRank++;
+						}
+						// Habilitar next se todos 3 ranks atribuídos
+						if (Object.keys(currentRanks).length === 3) {
+							byId('next').disabled = false;
+						}
+						// Atualizar answers com first, second, third baseado em ranks
+						const sorted = Object.entries(currentRanks).sort((a, b) => a[1] - b[1]);
+						state.vac.answers[idx] = {
+							id: q.id,
+							first: sorted[0][0],
+							second: sorted[1][0],
+							third: sorted[2][0]
+						};
 					});
-				}
-
-				list.addEventListener('click', e => {
-					const button = e.target.closest('.arrow-btn');
-					if (!button) return;
-
-					const item = button.closest('.vac-item');
-					if (button.classList.contains('up-btn')) {
-						const prevSibling = item.previousElementSibling;
-						if (prevSibling) {
-							list.insertBefore(item, prevSibling);
-						}
-					} else if (button.classList.contains('down-btn')) {
-						const nextSibling = item.nextElementSibling;
-						if (nextSibling) {
-							list.insertBefore(nextSibling, item);
-						}
-					}
-					updateButtons();
 				});
-				
-				updateButtons();
 
 				byId("prev").onclick = () => {
 					if (idx > 0) {
@@ -203,14 +215,7 @@
 				};
 
 				byId("next").onclick = () => {
-					const currentOrder = [...list.querySelectorAll('.vac-item')].map(item => item.dataset.tag);
-					state.vac.answers[idx] = { 
-						id: q.id, 
-						first: currentOrder[0], 
-						second: currentOrder[1], 
-						third: currentOrder[2] 
-					};
-
+					if (Object.keys(currentRanks).length !== 3) return alert("Atribua ranks para todas as opções");
 					if (idx < questions.length - 1) {
 						idx++;
 						render();
