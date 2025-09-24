@@ -251,9 +251,22 @@
 		const d = state.disc.result;
 		const v = state.vac.result;
 		
-		// Calcular máximo para normalizar as barras
-		const maxDisc = Math.max(d.score.D, d.score.I, d.score.S, d.score.C);
-		const maxVac = Math.max(v.score.V, v.score.A, v.score.K);
+		// Calcular porcentagens DISC
+		const totalDisc = Object.values(d.score).reduce((sum, val) => sum + val, 0) || 1;
+		const discPcts = {
+			D: Math.round((d.score.D / totalDisc) * 100),
+			I: Math.round((d.score.I / totalDisc) * 100),
+			S: Math.round((d.score.S / totalDisc) * 100),
+			C: Math.round((d.score.C / totalDisc) * 100),
+		};
+
+		// Calcular porcentagens VAC
+		const totalVac = Object.values(v.score).reduce((sum, val) => sum + val, 0) || 1;
+		const vacPcts = {
+			V: Math.round((v.score.V / totalVac) * 100),
+			A: Math.round((v.score.A / totalVac) * 100),
+			K: Math.round((v.score.K / totalVac) * 100),
+		};
 		
 		view.innerHTML = `
       <div style="text-align:center;margin-bottom:20px">
@@ -270,7 +283,7 @@
               <div style="font-size:12px;color:var(--muted)">Perfil dominante: ${d.dominant}</div>
             </div>
           </div>
-          ${bar("D", d.score.D, maxDisc)}${bar("I", d.score.I, maxDisc)}${bar("S", d.score.S, maxDisc)}${bar("C", d.score.C, maxDisc)}
+          ${bar("D", discPcts.D, 100)}${bar("I", discPcts.I, 100)}${bar("S", discPcts.S, 100)}${bar("C", discPcts.C, 100)}
           <div class="label" style="margin-top:12px">📝 Interpretação</div>
           <div style="font-size:13px;line-height:1.5;color:#909090">${escapeHtml(d.description || "")}</div>
         </div>
@@ -283,7 +296,7 @@
               <div style="font-size:12px;color:var(--muted)">Dominante: ${fullVAC(v.dominant)}</div>
             </div>
           </div>
-          ${bar("Visual", v.score.V, maxVac)}${bar("Auditivo", v.score.A, maxVac)}${bar("Cinestésico", v.score.K, maxVac)}
+          ${bar("Visual", vacPcts.V, 100)}${bar("Auditivo", vacPcts.A, 100)}${bar("Cinestésico", vacPcts.K, 100)}
           <div class="label" style="margin-top:12px">📝 Interpretação</div>
           <div style="font-size:13px;line-height:1.5;color:#909090">${escapeHtml(v.description || "")}</div>
         </div>
@@ -347,12 +360,12 @@
 	}
 
 	function bar(label, val, max) {
-		const pct = Math.max(0, Math.min(100, Math.round((val / max) * 100)));
+		const pct = Math.max(0, Math.min(100, val)); // val is already a percentage
 		const color = getBarColor(label);
 		return `<div style="margin:8px 0">
 			<div style="display:flex;justify-content:space-between;margin-bottom:4px">
 				<span style="font-weight:500">${label}</span>
-				<span style="color:var(--accent);font-weight:600">${val}</span>
+				<span style="color:var(--accent);font-weight:600">${val}%</span>
 			</div>
 			<div class="bar" style="position:relative">
 				<div style="position:absolute;top:0;left:0;height:100%;width:${pct}%;background:${color};border-radius:6px;transition:width 0.3s ease"></div>

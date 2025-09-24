@@ -23,7 +23,7 @@ hbs.registerHelper("barChart", function (items, options) {
 			return `
             <g transform="translate(${x}, 0)">
                 <rect x="0" y="${y}" width="${barWidth}" height="${barHeight}" rx="4" fill="${color}" />
-                <text x="${barWidth / 2}" y="${y - 8}" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">${item.value}</text>
+                <text x="${barWidth / 2}" y="${y - 8}" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">${item.value}%</text>
                 <text x="${barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="#666" font-size="12" 
                       style="overflow: visible; white-space: normal; max-width: ${barWidth}px;">${item.label}</text>
             </g>
@@ -60,17 +60,19 @@ async function generatePDF(participant, discResult, vacResult) {
 		throw new Error("O template de relatório não foi compilado com sucesso.");
 	}
 
+	const totalDisc = Object.values(discResult.score).reduce((sum, val) => sum + val, 0) || 1;
 	const discData = [
-		{ label: "Dominância (D)", value: discResult.score.D },
-		{ label: "Influência (I)", value: discResult.score.I },
-		{ label: "Estabilidade (S)", value: discResult.score.S },
-		{ label: "Conformidade (C)", value: discResult.score.C },
+		{ label: "Dominância (D)", value: Math.round(discResult.score.D / totalDisc * 100) },
+		{ label: "Influência (I)", value: Math.round(discResult.score.I / totalDisc * 100) },
+		{ label: "Estabilidade (S)", value: Math.round(discResult.score.S / totalDisc * 100) },
+		{ label: "Conformidade (C)", value: Math.round(discResult.score.C / totalDisc * 100) },
 	];
 
+	const totalVac = Object.values(vacResult.score).reduce((sum, val) => sum + val, 0) || 1;
 	const vacData = [
-		{ label: "Visual", value: vacResult.score.V },
-		{ label: "Auditivo", value: vacResult.score.A },
-		{ label: "Cinestésico", value: vacResult.score.K },
+		{ label: "Visual", value: Math.round(vacResult.score.V / totalVac * 100) },
+		{ label: "Auditivo", value: Math.round(vacResult.score.A / totalVac * 100) },
+		{ label: "Cinestésico", value: Math.round(vacResult.score.K / totalVac * 100) },
 	];
 
 	const renderData = {
@@ -78,13 +80,13 @@ async function generatePDF(participant, discResult, vacResult) {
 		discResult: {
 			...discResult,
 			data: discData,
-			maxValue: Math.max(...discData.map((d) => d.value)),
+			maxValue: 100,
 			colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'] // Cores para D, I, S, C
 		},
 		vacResult: {
 			...vacResult,
 			data: vacData,
-			maxValue: Math.max(...vacData.map((d) => d.value)),
+			maxValue: 100,
 			colors: ['#FF6B6B', '#4ECDC4', '#45B7D1'] // Cores para Visual, Auditivo, Cinestésico
 		},
 		generationDate: new Date().toLocaleDateString("pt-BR", {

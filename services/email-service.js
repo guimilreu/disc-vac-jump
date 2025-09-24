@@ -103,7 +103,7 @@ async function sendEmailWithPdf(participant, pdfLink) {
 		htmlContent: `
 			<div style="font-family: 'Manrope', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
 				<div style="background: #f0f0f0; padding: 40px 20px; text-align: center; border-radius: 10px 10px 0 0;">
-					<img src="https://jump.hackdev.org/public/assets/logo.png?v=1" alt="Logo JUMP com fundo transparente" style="max-width: 150px; height: auto; background: transparent; display: block; margin: 0 auto;">
+					<img src="https://jump.hackdev.org/public/assets/logo-2.png?v=1" alt="Logo JUMP com fundo transparente" style="max-width: 150px; height: auto; background: transparent; display: block; margin: 0 auto;">
 				</div>
 				<div style="background: #ffffff; padding: 40px 20px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
 					<h1 style="color: #333; font-size: 28px; margin-bottom: 20px; text-align: center;">Seu Relatório Está Pronto!</h1>
