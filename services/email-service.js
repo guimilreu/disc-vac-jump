@@ -102,8 +102,8 @@ async function sendEmailWithPdf(participant, pdfLink) {
 		subject: "Seu Relatório DISC + VAC - JUMP",
 		htmlContent: `
 			<div style="font-family: 'Manrope', Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-				<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center; border-radius: 10px 10px 0 0;">
-					<img src="https://via.placeholder.com/150x50/ffffff/667eea?text=JUMP" alt="JUMP Logo" style="max-width: 150px; height: auto;">
+				<div style="background: #f0f0f0; padding: 40px 20px; text-align: center; border-radius: 10px 10px 0 0;">
+					<img src="https://jump.hackdev.org/public/assets/logo.png" alt="JUMP Logo" style="max-width: 150px; height: auto;">
 				</div>
 				<div style="background: #ffffff; padding: 40px 20px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
 					<h1 style="color: #333; font-size: 28px; margin-bottom: 20px; text-align: center;">Seu Relatório Está Pronto!</h1>

@@ -9,8 +9,8 @@ const path = require("path");
 hbs.registerHelper("barChart", function (items, options) {
 	const { maxValue, colors } = options.hash;
 	const chartHeight = 150;
-	const barWidth = 40;
-	const barMargin = 20;
+	const barWidth = 60; // Aumentado para dar mais espaço
+	const barMargin = 30; // Aumentado para evitar sobreposição
 	const width = items.length * (barWidth + barMargin) - barMargin;
 
 	const bars = items
@@ -23,12 +23,9 @@ hbs.registerHelper("barChart", function (items, options) {
 			return `
             <g transform="translate(${x}, 0)">
                 <rect x="0" y="${y}" width="${barWidth}" height="${barHeight}" rx="4" fill="${color}" />
-                <text x="${barWidth / 2}" y="${
-				y - 8
-			}" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">${item.value}</text>
-                <text x="${barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="#666" font-size="12">${
-				item.label
-			}</text>
+                <text x="${barWidth / 2}" y="${y - 8}" text-anchor="middle" fill="#333" font-size="14" font-weight="bold">${item.value}</text>
+                <text x="${barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="#666" font-size="12" 
+                      style="overflow: visible; white-space: normal; max-width: ${barWidth}px;">${item.label}</text>
             </g>
         `;
 		})
@@ -82,11 +79,13 @@ async function generatePDF(participant, discResult, vacResult) {
 			...discResult,
 			data: discData,
 			maxValue: Math.max(...discData.map((d) => d.value)),
+			colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'] // Cores para D, I, S, C
 		},
 		vacResult: {
 			...vacResult,
 			data: vacData,
 			maxValue: Math.max(...vacData.map((d) => d.value)),
+			colors: ['#FF6B6B', '#4ECDC4', '#45B7D1'] // Cores para Visual, Auditivo, Cinestésico
 		},
 		generationDate: new Date().toLocaleDateString("pt-BR", {
 			day: "2-digit",
