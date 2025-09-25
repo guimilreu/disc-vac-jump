@@ -9,7 +9,13 @@
       <div class="card">
         <div style="text-align:center;margin-bottom:24px">
           <h1 style="font-family:var(--font-family);font-weight:800;font-size:28px;color:var(--accent);margin:0 0 8px 0">Teste DISC e VAC</h1>
-          <p style="color:var(--muted);margin:0;font-size:16px">Descubra seu perfil comportamental e estilo de aprendizagem</p>
+          	<p style="color:var(--muted);margin:0;font-size:16px">
+				👋 Bem-vindo, Bem-vinda, Alegria!
+				Você está ingressando no programa de treinamento da Jump e fazendo parte da nossa Alcateia, um grupo de vendedores que dominam técnica, relacionamento e processo de vendas, mas que acima de tudo entendem o valor do autoconhecimento e da inteligência emocional.
+				Agora, através dos testes DISC e VAC (Visual, Auditivo e Cinestésico), você vai descobrir o que precisa usar de melhor no seu perfil, o que deve se proteger para não limitar seus resultados, e como reconhecer essas mesmas características nos seus clientes. É isso que vai permitir criar atendimentos de grande experiência e alcançar alta performance em vendas.
+				👉 Responda com sinceridade. Mostre quem você é hoje, e não quem gostaria de ser. Só assim o resultado será verdadeiro e útil para a sua evolução.
+				🚀 Vamos juntos nessa jornada de autoconhecimento e performance!
+			</p>
         </div>
         <div class="grid cols-2">
           <div>
@@ -28,12 +34,12 @@
 		document.getElementById("go").onclick = async () => {
 			const name = byId("name").value.trim();
 			const email = byId("email").value.trim();
-			
+
 			if (!name) return alert("Por favor, preencha seu nome completo");
 			if (name.length < 2) return alert("Nome deve ter pelo menos 2 caracteres");
 			if (!email) return alert("Por favor, preencha seu e-mail");
 			if (!isValidEmail(email)) return alert("Por favor, insira um e-mail válido");
-			
+
 			state.participant = { name, email };
 			return stepDISC();
 		};
@@ -54,7 +60,7 @@
 			state.disc.questions = questions;
 			state.disc.answers = [];
 			let idx = 0;
-			
+
 			function render() {
 				const q = questions[idx];
 				view.innerHTML = `
@@ -62,17 +68,17 @@
             <div class="label">DISC • Pergunta ${idx + 1} de ${questions.length}</div>
             <div class="q" style="font-weight:600;margin:6px 0 10px">${q.text}</div>
             ${q.options
-					.map((o) => `<label class="opt"><input type="radio" name="opt" value="${o.key}"> ${o.label}</label>`)
-					.join("")}
+				.map((o) => `<label class="opt"><input type="radio" name="opt" value="${o.key}"> ${o.label}</label>`)
+				.join("")}
             <div style="display:flex;gap:8px;justify-content:space-between;margin-top:10px">
               <button class="btn" id="prev" ${idx === 0 ? "disabled" : ""}>Voltar</button>
             </div>
           </div>`;
 
 				// Adicionar evento para avanço automático ao clicar na opção
-				document.querySelectorAll('.opt').forEach(label => {
-					label.addEventListener('click', () => {
-						const radio = label.querySelector('input');
+				document.querySelectorAll(".opt").forEach((label) => {
+					label.addEventListener("click", () => {
+						const radio = label.querySelector("input");
 						radio.checked = true;
 						state.disc.answers[idx] = { id: q.id, key: radio.value };
 						setTimeout(() => {
@@ -91,7 +97,7 @@
 					render();
 				};
 			}
-			
+
 			render();
 		} catch (error) {
 			console.error("Erro ao carregar DISC:", error);
@@ -106,16 +112,16 @@
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ answers: state.disc.answers }),
 			});
-			
+
 			if (!r.ok) {
 				throw new Error(`Erro ${r.status}: ${r.statusText}`);
 			}
-			
+
 			const resp = await r.json();
 			if (!resp.success) {
 				throw new Error(resp.error || "Erro ao processar resultados DISC");
 			}
-			
+
 			state.disc.result = resp;
 			return stepVAC();
 		} catch (error) {
@@ -128,12 +134,12 @@
 		try {
 			const r = await fetch("/api/vac");
 			if (!r.ok) throw new Error(`Erro ${r.status}: ${r.statusText}`);
-			
+
 			const data = await r.json();
 			if (!data.success || !data.questions?.length) {
 				throw new Error("Sem perguntas do VAC disponíveis");
 			}
-			
+
 			const { questions } = data;
 			state.vac.questions = questions;
 			state.vac.answers = [];
@@ -143,7 +149,7 @@
 				const q = questions[idx];
 
 				if (!state.vac.answers[idx]) {
-					state.vac.answers[idx] = { id: q.id, ranks: {} }; 
+					state.vac.answers[idx] = { id: q.id, ranks: {} };
 				}
 				const currentRanks = state.vac.answers[idx].ranks;
 
@@ -153,16 +159,22 @@
 						<div class="q">${q.text}</div>
 						<div class="label">Clique nas opções para ordená-las: 1º, 2º e 3º.</div>
 						<div id="vac-list">
-							${q.options.map((o) => `
+							${q.options
+								.map(
+									(o) => `
 								<div class="vac-item" data-tag="${o.tag}">
 									<span class="item-label">${o.label}</span>
-									${currentRanks[o.tag] ? `<span class="rank-circle">${currentRanks[o.tag]}</span>` : ''}
+									${currentRanks[o.tag] ? `<span class="rank-circle">${currentRanks[o.tag]}</span>` : ""}
 								</div>
-							`).join("")}
+							`
+								)
+								.join("")}
 						</div>
 						<div style="display:flex;justify-content:space-between;margin-top:20px;">
 							<button class="btn" id="prev" ${idx === 0 ? "disabled" : ""}>Voltar</button>
-							<button class="btn" id="next" ${Object.keys(currentRanks).length === 3 ? "" : "disabled"}>${idx === questions.length - 1 ? "Concluir VAC" : "Próximo"}</button>
+							<button class="btn" id="next" ${Object.keys(currentRanks).length === 3 ? "" : "disabled"}>${
+					idx === questions.length - 1 ? "Concluir VAC" : "Próximo"
+				}</button>
 						</div>
 					</div>`;
 
@@ -171,11 +183,11 @@
 					for (let i = 1; i <= 3; i++) {
 						if (!usedRanks.has(i)) return i;
 					}
-					return null; 
+					return null;
 				};
 
-				document.querySelectorAll('.vac-item').forEach(item => {
-					item.addEventListener('click', () => {
+				document.querySelectorAll(".vac-item").forEach((item) => {
+					item.addEventListener("click", () => {
 						const tag = item.dataset.tag;
 						if (currentRanks[tag]) {
 							delete currentRanks[tag];
@@ -229,16 +241,16 @@
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ answers: state.vac.answers }),
 			});
-			
+
 			if (!r.ok) {
 				throw new Error(`Erro ${r.status}: ${r.statusText}`);
 			}
-			
+
 			const resp = await r.json();
 			if (!resp.success) {
 				throw new Error(resp.error || "Erro ao processar resultados VAC");
 			}
-			
+
 			state.vac.result = resp;
 			return stepResultados();
 		} catch (error) {
@@ -250,7 +262,7 @@
 	function stepResultados() {
 		const d = state.disc.result;
 		const v = state.vac.result;
-		
+
 		// Calcular porcentagens DISC
 		const totalDisc = Object.values(d.score).reduce((sum, val) => sum + val, 0) || 1;
 		const discPcts = {
@@ -267,7 +279,7 @@
 			A: ((v.score.A / totalVac) * 100).toFixed(1),
 			K: ((v.score.K / totalVac) * 100).toFixed(1),
 		};
-		
+
 		view.innerHTML = `
       <div style="text-align:center;margin-bottom:20px">
         <h2 style="color:var(--accent);margin:0">🎉 Seus Resultados</h2>
@@ -283,7 +295,11 @@
               <div style="font-size:12px;color:var(--muted)">Perfil dominante: ${d.dominant}</div>
             </div>
           </div>
-          ${bar("D", discPcts.D, 100)}${bar("I", discPcts.I, 100)}${bar("S", discPcts.S, 100)}${bar("C", discPcts.C, 100)}
+          ${bar("D", discPcts.D, 100)}${bar("I", discPcts.I, 100)}${bar("S", discPcts.S, 100)}${bar(
+			"C",
+			discPcts.C,
+			100
+		)}
           <div class="label" style="margin-top:12px">📝 Interpretação</div>
           <div style="font-size:13px;line-height:1.5;color:#909090">${escapeHtml(d.description || "")}</div>
         </div>
@@ -321,32 +337,36 @@
 				const button = byId("pdf");
 				button.disabled = true;
 				button.textContent = "Gerando...";
-				
+
 				const payload = { participant: state.participant, disc: d, vac: v };
 				const r = await fetch("/api/report", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(payload),
 				});
-				
+
 				if (!r.ok) {
 					throw new Error(`Erro ${r.status}: ${r.statusText}`);
 				}
-				
+
 				const result = await r.json();
 				if (!result.success) {
 					throw new Error(result.error || "Erro ao gerar relatório");
 				}
-				
+
 				// Abrir nova guia com o URL do PDF
 				if (result.downloadUrl) {
-					window.open(result.downloadUrl, '_blank');
+					window.open(result.downloadUrl, "_blank");
 				}
-				
+
 				if (result.emailed) {
-					alert("✅ Relatório enviado por e-mail com sucesso!\n\nVerifique sua caixa de entrada e também a pasta de spam.\nUma nova guia foi aberta com o PDF para visualização imediata.");
+					alert(
+						"✅ Relatório enviado por e-mail com sucesso!\n\nVerifique sua caixa de entrada e também a pasta de spam.\nUma nova guia foi aberta com o PDF para visualização imediata."
+					);
 				} else {
-					alert("📄 Relatório gerado com sucesso! Uma nova guia foi aberta com o PDF para visualização/download.");
+					alert(
+						"📄 Relatório gerado com sucesso! Uma nova guia foi aberta com o PDF para visualização/download."
+					);
 				}
 			} catch (error) {
 				console.error("Erro ao gerar relatório:", error);
@@ -375,15 +395,15 @@
 
 	function getBarColor(label) {
 		const colors = {
-			'D': '#FF6B6B',
-			'I': '#4ECDC4', 
-			'S': '#45B7D1',
-			'C': '#96CEB4',
-			'Visual': '#FF6B6B',
-			'Auditivo': '#4ECDC4',
-			'Cinestésico': '#45B7D1'
+			D: "#FF6B6B",
+			I: "#4ECDC4",
+			S: "#45B7D1",
+			C: "#96CEB4",
+			Visual: "#FF6B6B",
+			Auditivo: "#4ECDC4",
+			Cinestésico: "#45B7D1",
 		};
-		return colors[label] || 'var(--accent)';
+		return colors[label] || "var(--accent)";
 	}
 
 	function byId(id) {
@@ -400,8 +420,8 @@
 	function fullVAC(v) {
 		const mapping = {
 			V: "Visual",
-			A: "Auditivo", 
-			K: "Cinestésico"
+			A: "Auditivo",
+			K: "Cinestésico",
 		};
 		return mapping[v] || v;
 	}
