@@ -10,10 +10,10 @@
         <div style="text-align:center;margin-bottom:24px">
           <h1 style="font-family:var(--font-family);font-weight:800;font-size:28px;color:var(--accent);margin:0 0 8px 0">Teste DISC e VAC</h1>
           	<p style="color:var(--muted);margin:0;font-size:16px">
-				👋 Bem-vindo, Bem-vinda, Alegria!</br>
+				👋 Bem-vindo, Bem-vinda, Alegria!</br></br>
 				Você está ingressando no programa de treinamento da Jump e fazendo parte da nossa Alcateia, um grupo de vendedores que dominam técnica, relacionamento e processo de vendas, mas que acima de tudo entendem o valor do autoconhecimento e da inteligência emocional.
-				Agora, através dos testes DISC e VAC (Visual, Auditivo e Cinestésico), você vai descobrir o que precisa usar de melhor no seu perfil, o que deve se proteger para não limitar seus resultados, e como reconhecer essas mesmas características nos seus clientes. É isso que vai permitir criar atendimentos de grande experiência e alcançar alta performance em vendas.</br>
-				👉 Responda com sinceridade. Mostre quem você é hoje, e não quem gostaria de ser. Só assim o resultado será verdadeiro e útil para a sua evolução.</br>
+				Agora, através dos testes DISC e VAC (Visual, Auditivo e Cinestésico), você vai descobrir o que precisa usar de melhor no seu perfil, o que deve se proteger para não limitar seus resultados, e como reconhecer essas mesmas características nos seus clientes. É isso que vai permitir criar atendimentos de grande experiência e alcançar alta performance em vendas.</br></br>
+				👉 Responda com sinceridade. Mostre quem você é hoje, e não quem gostaria de ser. Só assim o resultado será verdadeiro e útil para a sua evolução.</br></br>
 				🚀 Vamos juntos nessa jornada de autoconhecimento e performance!
 			</p>
         </div>
