@@ -283,7 +283,9 @@
 		view.innerHTML = `
       <div style="text-align:center;margin-bottom:20px">
         <h2 style="color:var(--accent);margin:0">🎉 Seus Resultados</h2>
-        <p style="color:var(--muted);margin:5px 0">Parabéns por completar os testes DISC + VAC!</p>
+        <p style="color:var(--muted);margin:5px 0">Parabéns ${
+			state.participant.name
+		} por completar os testes DISC + VAC!</p>
       </div>
       
       <div class="grid cols-2" style="gap:16px">
