@@ -175,7 +175,7 @@ router.post('/vac/score', (req, res) => {
     }
 
     // Calcular pontuação VAC (10, 5, 0 para 1º, 2º, 3º)
-    const scores = { V: 0, A: 0, K: 0 };
+    const scores = { V: 0, A: 0, C: 0 };
     
     answers.forEach(answer => {
       if (answer && answer.first && scores.hasOwnProperty(answer.first)) {

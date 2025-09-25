@@ -277,7 +277,7 @@
 		const vacPcts = {
 			V: ((v.score.V / totalVac) * 100).toFixed(1),
 			A: ((v.score.A / totalVac) * 100).toFixed(1),
-			K: ((v.score.K / totalVac) * 100).toFixed(1),
+			C: ((v.score.C / totalVac) * 100).toFixed(1),
 		};
 
 		view.innerHTML = `
@@ -314,7 +314,7 @@
               <div style="font-size:12px;color:var(--muted)">Dominante: ${fullVAC(v.dominant)}</div>
             </div>
           </div>
-          ${bar("Visual", vacPcts.V, 100)}${bar("Auditivo", vacPcts.A, 100)}${bar("Cinestésico", vacPcts.K, 100)}
+          ${bar("Visual", vacPcts.V, 100)}${bar("Auditivo", vacPcts.A, 100)}${bar("Cinestésico", vacPcts.C, 100)}
           <div class="label" style="margin-top:12px">📝 Interpretação</div>
           <div style="font-size:13px;line-height:1.5;color:#909090">${escapeHtml(v.description || "")}</div>
         </div>
@@ -423,7 +423,7 @@
 		const mapping = {
 			V: "Visual",
 			A: "Auditivo",
-			K: "Cinestésico",
+			C: "Cinestésico",
 		};
 		return mapping[v] || v;
 	}
