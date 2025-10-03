@@ -30,7 +30,6 @@ async function uploadFile(buffer, filename, contentType) {
 		Key: filename,
 		Body: buffer,
 		ContentType: contentType,
-		ACL: 'public-read', // Torna o objeto publicamente legível
 	};
 
 	return s3.upload(params).promise();
