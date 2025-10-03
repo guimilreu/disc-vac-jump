@@ -76,10 +76,8 @@
           </div>`;
 
 				// Adicionar evento para avanço automático ao clicar na opção
-				document.querySelectorAll(".opt").forEach((label) => {
-					label.addEventListener("click", () => {
-						const radio = label.querySelector("input");
-						radio.checked = true;
+				document.querySelectorAll(".opt input").forEach((radio) => {
+					radio.addEventListener("change", () => {
 						state.disc.answers[idx] = { id: q.id, key: radio.value };
 						setTimeout(() => {
 							if (idx < questions.length - 1) {
