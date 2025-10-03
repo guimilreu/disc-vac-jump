@@ -6,7 +6,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Ver televisão, ler jornal ou revista" },
       { tag: "A", label: "Ouvir música e/ ou conversar com alguém" },
-      { tag: "K", label: "Relaxar o corpo, fazer uma caminhada" }
+      { tag: "C", label: "Relaxar o corpo, fazer uma caminhada" }
     ]
   },
   {
@@ -15,7 +15,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Faço logo uma imagem do cantor ou do tema da música" },
       { tag: "A", label: "Presto bem atenção na melodia e na letra" },
-      { tag: "K", label: "Não consigo deixar de batucar com os pés ou mãos" }
+      { tag: "C", label: "Não consigo deixar de batucar com os pés ou mãos" }
     ]
   },
   {
@@ -24,7 +24,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "De sua imagem" },
       { tag: "A", label: "Do som da sua voz" },
-      { tag: "K", label: "Do calor da sua mão/ corpo" }
+      { tag: "C", label: "Do calor da sua mão/ corpo" }
     ]
   },
   {
@@ -33,7 +33,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Da paisagem" },
       { tag: "A", label: "Dos sons que eu ouvi lá" },
-      { tag: "K", label: "Das sensações que o local me proporciona" }
+      { tag: "C", label: "Das sensações que o local me proporciona" }
     ]
   },
   {
@@ -42,7 +42,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Me passarem por escrito o que eu devo fazer" },
       { tag: "A", label: "Alguém me explica detalhadamente como fazer" },
-      { tag: "K", label: "Sinto que sou capaz de fazer o que de mim esperam" }
+      { tag: "C", label: "Sinto que sou capaz de fazer o que de mim esperam" }
     ]
   },
   {
@@ -51,7 +51,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Visualizo todas as possibilidades antes de me decidir" },
       { tag: "A", label: "Ouço todo os argumentos, prós e contras, conversando comigo mesmo" },
-      { tag: "K", label: "Peso prós e contras, sentindo qual a melhor escolha" }
+      { tag: "C", label: "Peso prós e contras, sentindo qual a melhor escolha" }
     ]
   },
   {
@@ -60,7 +60,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Fotografia, pintura, leitura, desenhos, filmes, ver televisão, olhar as coisas" },
       { tag: "A", label: "Música, instrumentos musicais, concertos sinfônicos, sininhos" },
-      { tag: "K", label: "Jogar bola, fazer trabalhos artesanais, fazer massagem" }
+      { tag: "C", label: "Jogar bola, fazer trabalhos artesanais, fazer massagem" }
     ]
   },
   {
@@ -69,7 +69,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Imagino-me usando a roupa" },
       { tag: "A", label: "Penso no que as pessoas vão dizer quando me virem de roupa nova" },
-      { tag: "K", label: "Sinto o tecido, o caimento, o conforto" }
+      { tag: "C", label: "Sinto o tecido, o caimento, o conforto" }
     ]
   },
   {
@@ -78,7 +78,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Olho-me no espelho e me vejo melhor do que antes" },
       { tag: "A", label: "Ouço as pessoas comentarem sobre mim" },
-      { tag: "K", label: "Sinto meu corpo mais firme e em boa forma" }
+      { tag: "C", label: "Sinto meu corpo mais firme e em boa forma" }
     ]
   },
   {
@@ -87,7 +87,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Olhando os números para ver se estão corretos" },
       { tag: "A", label: "Contando os números baixinhos" },
-      { tag: "K", label: "Contando nos dedos" }
+      { tag: "C", label: "Contando nos dedos" }
     ]
   },
   {
@@ -96,7 +96,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "O visual da areia, do sol, da cor da água, das pessoas" },
       { tag: "A", label: "O som das ondas o sopro do vento, o burburinho das pessoas" },
-      { tag: "K", label: "A sensação da areia nos pés, da água no corpo, do calor do sol, o cheiro do mar" }
+      { tag: "C", label: "A sensação da areia nos pés, da água no corpo, do calor do sol, o cheiro do mar" }
     ]
   },
   {
@@ -105,7 +105,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "O quarto esteja com a luminosidade adequada" },
       { tag: "A", label: "O quarto esteja silencioso ou com sons suaves" },
-      { tag: "K", label: "A cama esteja bem confortável" }
+      { tag: "C", label: "A cama esteja bem confortável" }
     ]
   },
   {
@@ -114,7 +114,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Localizar-me olhando um guia de ruas ou até mesmo um mapa" },
       { tag: "A", label: "Perguntar a alguém onde fica o lugar" },
-      { tag: "K", label: "Seguir a minha intuição que sempre me conduz ao caminho certo" }
+      { tag: "C", label: "Seguir a minha intuição que sempre me conduz ao caminho certo" }
     ]
   },
   {
@@ -123,7 +123,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Olhando a expressão facial da pessoa enquanto fala" },
       { tag: "A", label: "Pelo tom da voz" },
-      { tag: "K", label: "Pela sensação que me dá de que algo não vai bem" }
+      { tag: "C", label: "Pela sensação que me dá de que algo não vai bem" }
     ]
   },
   {
@@ -132,7 +132,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Apreciar o cuidado e o colorido das flores" },
       { tag: "A", label: "Comentar sobre sua beleza" },
-      { tag: "K", label: "Tocá-la e sentir seu perfume" }
+      { tag: "C", label: "Tocá-la e sentir seu perfume" }
     ]
   },
   {
@@ -141,7 +141,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Pelo modo como me visto" },
       { tag: "A", label: "Pelo tom da minha voz" },
-      { tag: "K", label: "Pelos sentimentos que compartilho" }
+      { tag: "C", label: "Pelos sentimentos que compartilho" }
     ]
   },
   {
@@ -150,7 +150,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "São os times correndo, o movimento de armação das jogadas" },
       { tag: "A", label: "São os gritos e a cantoria das torcidas" },
-      { tag: "K", label: "É a emoção de sentir as pessoas torcendo" }
+      { tag: "C", label: "É a emoção de sentir as pessoas torcendo" }
     ]
   },
   {
@@ -159,7 +159,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Percebo que ela se aproxima de mim" },
       { tag: "A", label: "Ela começa a falar comigo" },
-      { tag: "K", label: "Sinto que ela está por perto" }
+      { tag: "C", label: "Sinto que ela está por perto" }
     ]
   },
   {
@@ -168,7 +168,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "Vejo-me mudando para um local de trabalho mais confortável" },
       { tag: "A", label: "Ouço alguém elogiando meu trabalho" },
-      { tag: "K", label: "Sinto-me satisfeito fazendo meu trabalho" }
+      { tag: "C", label: "Sinto-me satisfeito fazendo meu trabalho" }
     ]
   },
   {
@@ -177,7 +177,7 @@ const VAC_QUESTIONS = [
     options: [
       { tag: "V", label: "E rapidamente olhar a paisagem, o sol, o orvalho" },
       { tag: "A", label: "Com o som do despertador ou de alguém me chamando" },
-      { tag: "K", label: "Espreguiçando-me ou com alguém me tocando" }
+      { tag: "C", label: "Espreguiçando-me ou com alguém me tocando" }
     ]
   }
 ];
@@ -196,7 +196,7 @@ const VAC_RESULTS = {
     strengths: "Comunicação clara e boa escuta. Capacidade de memorizar frases, nomes e conversas com facilidade. Pode ser um excelente facilitador de grupos, palestrante ou vendedor por telefone.",
     care: "Ambientes barulhentos podem causar distração. Conteúdos escritos podem ser menos eficazes se não forem lidos em voz alta ou discutidos."
   },
-  K: {
+  C: {
     title: "Perfil Cinestésico",
     learning: "Fazendo, manipulando, testando, praticando. Gosta de experimentar para entender. Precisa colocar a mão na massa.",
     strengths: "Ação, energia, execução e vivência prática. Facilidade com habilidades manuais, movimento e resolução prática de problemas. Pode ser excelente em campo, produção, atendimento e simulações práticas.",

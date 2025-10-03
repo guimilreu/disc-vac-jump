@@ -72,7 +72,7 @@ async function generatePDF(participant, discResult, vacResult) {
 	const vacData = [
 		{ label: "Visual", value: ((vacResult.score.V / totalVac) * 100).toFixed(1) },
 		{ label: "Auditivo", value: ((vacResult.score.A / totalVac) * 100).toFixed(1) },
-		{ label: "Cinestésico", value: ((vacResult.score.K / totalVac) * 100).toFixed(1) },
+		{ label: "Cinestésico", value: ((vacResult.score.C / totalVac) * 100).toFixed(1) },
 	];
 
 	const renderData = {
